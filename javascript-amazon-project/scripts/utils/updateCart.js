@@ -24,6 +24,4 @@ export function updateCartQuantity(container) {
   else if(cartQuantity === 0) {
     element.innerText = '';
   }
-
-
 }

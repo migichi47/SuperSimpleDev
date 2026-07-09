@@ -5,7 +5,6 @@ import { removeFromCart } from '../data/cart.js';
 import { updateCartQuantity } from './utils/updateCart.js';
 
 let cartSummaryHTML = '';
-let count = 0;
 
 cart.forEach((cartItem) => {
   const productId = cartItem.productId;
@@ -14,7 +13,6 @@ cart.forEach((cartItem) => {
   products.forEach((product) => {
     if (product.id === productId) {
       matchingProduct = product;
-      count += cartItem.quantity;
     }
   });
 
