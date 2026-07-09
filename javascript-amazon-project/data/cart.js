@@ -61,7 +61,7 @@ export function updateQuantity(productId, newQuantity) {
   cart.forEach((cartItem) => {
     if(cartItem.productId === productId) {
       cartItem.quantity = newQuantity;
-      document.querySelector('.js-quantity-label').innerHTML = newQuantity;
+      document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
       saveToStorage();
       updateCartQuantity('.js-checkout');
     };

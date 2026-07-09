@@ -1,10 +1,11 @@
 import { cart } from '../../data/cart.js';
-import { products } from '../../data/products.js';
+import { products, getProduct } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
 import { removeFromCart, updateQuantity, updateDeliveryOption } from '../../data/cart.js';
 import { updateCartQuantity } from '../utils/updateCart.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
-import { deliveryOptions } from '../../data/deliveryOptions.js';
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
+import { renderPaymentSummary } from './paymentSummary.js';
 
 
 export function renderOrderSummary() {
@@ -13,25 +14,10 @@ export function renderOrderSummary() {
   let cartSummaryHTML = '';
 
   cart.forEach((cartItem) => {
-    const productId = cartItem.productId;
-
-    let matchingProduct;
-    products.forEach((product) => {
-      if (product.id === productId) {
-        matchingProduct = product;
-      };
-    });
-
-
-
+    const matchingProduct = getProduct(cartItem.productId);
     const deliveryOptionId = cartItem.deliveryOptionId;
-    let deliveryOption;
-
-    deliveryOptions.forEach((option) => {
-      if(option.id === deliveryOptionId) {
-        deliveryOption = option;
-      };
-    });
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
+    // console.log(deliveryOption)
 
     const today = dayjs();
       const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
@@ -55,7 +41,7 @@ export function renderOrderSummary() {
             <div class="product-price">$${formatCurrency(matchingProduct.priceCents)}</div>
             <div class="product-quantity">
               <span>
-                Quantity: <span class="quantity-label js-quantity-label">${cartItem.quantity}</span>
+                Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
               </span>
               <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}" >
                 Update
@@ -156,6 +142,7 @@ export function renderOrderSummary() {
       
       element.value = '';
       document.querySelector(`.js-cart-item-container-${productId}`).classList.remove('is-editing-quantity');
+      renderPaymentSummary()
   }
 
 
@@ -179,6 +166,7 @@ export function renderOrderSummary() {
       const {productId, deliveryOptionId} = element.dataset;
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 };
