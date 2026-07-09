@@ -1,7 +1,6 @@
 import { products } from "../data/products.js";
 
 export let cart = JSON.parse(localStorage.getItem('cart'));
-
 if (!cart) {
   cart = [{
     productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
@@ -26,12 +25,15 @@ export function addToCart(productId) {
     }
   });
 
+  let productQuantity = Number(document.querySelector(`.js-select-${productId}`).value);
+  console.log(productQuantity);
+
   if (matchingItem) {
-    matchingItem.quantity += 1;
+    matchingItem.quantity += productQuantity;
   } else {
     cart.push({
     productId: productId,
-    quantity: 1
+    quantity: productQuantity,
   });
   }
   saveToStorage();
