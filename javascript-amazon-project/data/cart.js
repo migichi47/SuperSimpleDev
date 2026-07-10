@@ -63,7 +63,6 @@ export function updateQuantity(productId, newQuantity) {
       cartItem.quantity = newQuantity;
       document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
       saveToStorage();
-      updateCartQuantity('.js-checkout');
     };
   });
 };

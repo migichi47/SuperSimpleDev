@@ -9,16 +9,7 @@ export function updateCartQuantity(container) {
   const element = document.querySelector(container);
 
   if(cartQuantity) {
-
-    if(container === '.js-checkout') {
-      element.innerText = `${cartQuantity + (
-        cartQuantity === 1
-        ? ' item'
-        : ' items'
-      )}`;
-    } else {
-      element.innerText = cartQuantity;
-    }
+    element.innerText = cartQuantity;
   }
 
   else if(cartQuantity === 0) {
