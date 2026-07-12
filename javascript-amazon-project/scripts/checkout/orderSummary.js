@@ -66,14 +66,36 @@ export function renderOrderSummary() {
     `;
   });
 
-  function deliveryOptionsHTML(matchingProduct, cartItem) {
+  function deliveryDayWeekend(deliveryDay) {
+    if (deliveryDay.format('dddd') === 'Saturday' || deliveryDay.format('dddd') === 'Sunday') {
+      return true;
+    }
+  };
 
+  function getDeliveryDay(deliveryOption) {
+    const deliveryDays = deliveryOption.deliveryDays;
+
+    let currentDay = dayjs();
+    let daysAdded = 0;
+
+    while (daysAdded < deliveryDays) {
+      if (!deliveryDayWeekend(currentDay)) {
+        daysAdded += 1;
+      };
+      currentDay = currentDay.add(1, 'days');
+    }
+
+    const deliveryDate = currentDay.subtract(1, 'days');
+    return deliveryDate;
+  };
+
+  function deliveryOptionsHTML(matchingProduct, cartItem) {
     let html = '';
 
     deliveryOptions.forEach((deliveryOption) => {
-
       const today = dayjs();
-      const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
+
+      const deliveryDate = getDeliveryDay(deliveryOption);
       const dateString = deliveryDate.format('dddd, MMMM D');
 
       const priceString = deliveryOption.priceCents === 0
